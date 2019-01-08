@@ -2,12 +2,12 @@ const insecurity = require('../lib/insecurity')
 const models = require('../models/index')
 
 module.exports = function applyCoupon () {
-  return ({params}, res, next) => {
+  return ({ params }, res, next) => {
     const id = params.id
     let coupon = params.coupon ? decodeURIComponent(params.coupon) : undefined
     const discount = insecurity.discountFromCoupon(coupon)
     coupon = discount ? coupon : null
-    models.Basket.findById(id).then(basket => {
+    models.Basket.findByPk(id).then(basket => {
       if (basket) {
         basket.updateAttributes({ coupon }).then(() => {
           if (discount) {
